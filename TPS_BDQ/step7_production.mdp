@@ -1,0 +1,55 @@
+;============================
+; GROMACS MD parameter file
+; Independent replicates version
+;============================
+
+integrator              = md
+dt                      = 0.002
+nsteps                  = 5000000         ; 10 ns
+nstxout-compressed      = 50000
+nstxout                 = 0
+nstvout                 = 0
+nstfout                 = 0
+nstcalcenergy           = 100
+nstenergy               = 1000
+nstlog                  = 1000
+
+; Cutoffs
+cutoff-scheme           = Verlet
+nstlist                 = 20
+rlist                   = 1.2
+vdwtype                 = Cut-off
+vdw-modifier            = Force-switch
+rvdw_switch             = 1.0
+rvdw                    = 1.2
+coulombtype             = PME
+rcoulomb                = 1.2
+
+; Temperature coupling
+tcoupl                  = v-rescale
+tc_grps                 = MEMB SOLV
+tau_t                   = 1.0 1.0
+ref_t                   = 310 310
+
+; Pressure coupling
+pcoupl                  = C-rescale
+pcoupltype              = semiisotropic
+tau_p                   = 5.0
+compressibility         = 4.5e-5  4.5e-5
+ref_p                   = 1.0     1.0
+
+; Constraints
+constraints             = h-bonds
+constraint_algorithm    = LINCS
+
+; Velocities & seeds for independent replicates
+continuation            = no
+gen_vel                 = yes
+gen_temp                = 310
+gen_seed                = -1          ; Random seed per run (GROMACS picks a random integer)
+
+; Communication (for parallel runs)
+nstcomm                 = 100
+comm_mode               = linear
+comm_grps               = MEMB SOLV
+
