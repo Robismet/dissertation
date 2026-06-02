@@ -1,0 +1,73 @@
+; ===============================
+; Production MD (500 ns)
+; Suitable for independent replicates
+; ===============================
+
+; RUN CONTROL
+integrator              = md
+dt                      = 0.002
+nsteps                  = 250000000      ; 500 ns
+
+; OUTPUT CONTROL
+nstxout                 = 0
+nstvout                 = 0
+nstfout                 = 0
+nstxout-compressed      = 5000           ; every 10 ps
+nstenergy               = 1000
+nstlog                  = 1000
+nstcalcenergy           = 100
+
+; NEIGHBORSEARCHING
+cutoff-scheme           = Verlet
+nstlist                 = 20
+rlist                   = 1.2
+
+; ELECTROSTATICS
+coulombtype             = PME
+rcoulomb                = 1.2
+pme_order               = 4
+fourierspacing          = 0.12
+
+; VAN DER WAALS
+vdwtype                 = Cut-off
+vdw-modifier            = Force-switch
+rvdw_switch             = 1.0
+rvdw                    = 1.2
+
+; TEMPERATURE COUPLING
+tcoupl                  = Nose-Hoover
+tc_grps                 = SOLU MEMB SOLV
+tau_t                   = 1.0 1.0 1.0
+ref_t                   = 310 310 310
+
+; PRESSURE COUPLING
+pcoupl                  = Parrinello-Rahman
+pcoupltype              = semiisotropic
+tau_p                   = 5.0
+compressibility         = 4.5e-5 4.5e-5
+ref_p                   = 1.0 1.0
+
+; CONSTRAINTS
+constraints             = h-bonds
+constraint_algorithm    = lincs
+lincs_iter              = 1
+lincs_order             = 4
+
+; PERIODIC BOUNDARY CONDITIONS
+pbc                     = xyz
+
+; VELOCITY GENERATION (important for replicates)
+gen_vel                 = yes
+gen_temp                = 310
+gen_seed                = -1
+
+; CONTINUATION
+continuation            = no
+
+; CENTER OF MASS REMOVAL
+comm_mode               = Linear
+nstcomm                 = 100
+comm_grps               = SOLU_MEMB SOLV
+
+; DISPERSION CORRECTION
+DispCorr                = EnerPres
